@@ -269,6 +269,8 @@ class Histogram {
   TH2D_ptr delta_t_hist[particle_num][charge_num][with_id_num][4];
   // Delta T
 
+  TH2D_ptr vertex_t_hist[particle_num][charge_num][with_id_num][4];
+  
  public:
   Histogram(const std::string& output_file);
   ~Histogram();

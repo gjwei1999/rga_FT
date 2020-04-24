@@ -40,7 +40,7 @@ bool Cuts::ElectronCuts() {
 
 
   _elec &= (_data->charge(_data->_pos_of_elec) == NEGATIVE);
-  _elec &= (_data->pid(_data->_pos_of_elec) == ELECTRON);
+  _elec &= (_data->ft_pid(_data->_pos_of_elec) == ELECTRON);
 //  _elec &= !std::isnan(_data->cc_nphe_tot(_data->_pos_of_elec));
 
   //_elec &= (_data->beta(0) > 0.05);
@@ -138,7 +138,7 @@ bool Cuts::IsPip(int i) {
 
   //_pip &= (abs(_dt->dt_Pi(i)) < 0.5 || abs(_dt->dt_ctof_Pi(i)) < 0.3);
   //_pip &= !(abs(_dt->dt_P(i)) < 0.5 || abs(_dt->dt_ctof_P(i)) < 0.2);
-  _pip &= (_data->pid(i) == PIP);
+  _pip &= (_data->ft_pid(i) == PIP);
   //_pip &= (abs(_data->chi2pid(i)) < 0.5);
   return _pip;
 }
@@ -154,7 +154,7 @@ bool Cuts::IsProton(int i) {
   
   //_proton &= (abs(_dt->dt_P(i)) < 0.5 || abs(_dt->dt_ctof_P(i)) < 0.4);
   //_proton &= !(abs(_dt->dt_Pi(i)) < 0.05 || abs(_dt->dt_ctof_Pi(i)) < 0.02);
-  _proton &= (_data->pid(i) == PROTON);
+  _proton &= (_data->ft_pid(i) == PROTON);
   //_proton &= (abs(_data->chi2pid(i)) < 0.5);
   return _proton;
 }
@@ -168,7 +168,7 @@ bool Cuts::IsPim(int i) {
   
 
   //_pim &= (abs(_dt->dt_Pi(i)) < 0.5 || abs(_dt->dt_ctof_Pi(i)) < 0.5);
-  _pim &= (_data->pid(i) == PIM);
+  _pim &= (_data->ft_pid(i) == PIM);
   //_pim &= (abs(_data->chi2pid(i)) < 0.5);
   return _pim;
 }

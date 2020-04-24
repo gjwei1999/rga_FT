@@ -1246,20 +1246,49 @@ void Histogram::makeHists_deltat() {
                                    Form("#Deltat %s %s %s %s", tof.c_str(), particle_name[p].c_str(),
                                         charge_name[c].c_str(), id_name[i].c_str()),
                                    bins, 0, 3.0, bins, -10.0, 15.0);
-        tof = "new_vt";
+        tof = "new_vt_dt";
         delta_t_hist[p][c][i][2] =
             std::make_shared<TH2D>(Form("delta_t_%s_%s_%s_%s", tof.c_str(), particle_name[p].c_str(),
                                         charge_name[c].c_str(), id_name[i].c_str()),
                                    Form("#Deltat %s %s %s %s", tof.c_str(), particle_name[p].c_str(),
                                         charge_name[c].c_str(), id_name[i].c_str()),
                                    bins, 0, 3.0, bins, -10.0, 15.0);
-        tof = "ft_vt";
+        tof = "ft_vt_dt";
         delta_t_hist[p][c][i][3] =
             std::make_shared<TH2D>(Form("delta_t_%s_%s_%s_%s", tof.c_str(), particle_name[p].c_str(),
                                         charge_name[c].c_str(), id_name[i].c_str()),
                                    Form("#Deltat %s %s %s %s", tof.c_str(), particle_name[p].c_str(),
                                         charge_name[c].c_str(), id_name[i].c_str()),
                                    bins, 0, 3.0, bins, -10.0, 15.0);
+            tof = "cal_vt";
+        vertex_t_hist[p][c][i][0] =
+            std::make_shared<TH2D>(Form("vertex_t_%s_%s_%s_%s", tof.c_str(), particle_name[p].c_str(),
+                                        charge_name[c].c_str(), id_name[i].c_str()),
+                                   Form("#Vertext %s %s %s %s", tof.c_str(), particle_name[p].c_str(),
+                                        charge_name[c].c_str(), id_name[i].c_str()),
+                                   bins, 0, 3.0, bins, 80.0, 100.0);
+            tof = "cal_ctof_vt";
+        vertex_t_hist[p][c][i][1] =
+            std::make_shared<TH2D>(Form("vertex_t_%s_%s_%s_%s", tof.c_str(), particle_name[p].c_str(),
+                                        charge_name[c].c_str(), id_name[i].c_str()),
+                                   Form("#Vertext %s %s %s %s", tof.c_str(), particle_name[p].c_str(),
+                                        charge_name[c].c_str(), id_name[i].c_str()),
+                                   bins, 0, 3.0, bins, 80.0, 100.0);
+            
+            tof = "new_vt_vt";
+        vertex_t_hist[p][c][i][2] =
+            std::make_shared<TH2D>(Form("vertex_t_%s_%s_%s_%s", tof.c_str(), particle_name[p].c_str(),
+                                        charge_name[c].c_str(), id_name[i].c_str()),
+                                   Form("#Vertext %s %s %s %s", tof.c_str(), particle_name[p].c_str(),
+                                        charge_name[c].c_str(), id_name[i].c_str()),
+                                   bins, 0, 3.0, bins, 80.0, 100.0);
+            tof = "ft_vt_vt";
+        vertex_t_hist[p][c][i][3] =
+            std::make_shared<TH2D>(Form("vertex_t_%s_%s_%s_%s", tof.c_str(), particle_name[p].c_str(),
+                                        charge_name[c].c_str(), id_name[i].c_str()),
+                                   Form("#Vertext %s %s %s %s", tof.c_str(), particle_name[p].c_str(),
+                                        charge_name[c].c_str(), id_name[i].c_str()),
+                                   bins, 0, 3.0, bins, 80.0, 100.0);
       }
     }
   }
@@ -1324,6 +1353,59 @@ void Histogram::Fill_deltat_pi(const std::shared_ptr<Branches12>& data, const st
     else
       delta_t_hist[1][1][2][3]->Fill(mom, ft_time);
   }
+  
+ if (fc)
+    time = dt->vt_ctof_Pi();
+  else
+    time = dt->vt_Pi();
+
+  if (charge == 1) {
+    vertex_t_hist[1][0][0][fc]->Fill(mom, time);
+    if (_cuts->IsPip(part))
+      vertex_t_hist[1][0][1][fc]->Fill(mom, time);
+    else
+      vertex_t_hist[1][0][2][fc]->Fill(mom, time);
+  } else if (charge == -1) {
+    vertex_t_hist[1][1][0][fc]->Fill(mom, time);
+    if (_cuts->IsPim(part))
+      vertex_t_hist[1][1][1][fc]->Fill(mom, time);
+    else
+      vertex_t_hist[1][1][2][fc]->Fill(mom, time);
+  }
+  
+  new_time = dt->_new_vt(part);
+  ft_time = dt->_new_ft_vt(part);
+  
+  if (charge == 1) {
+    vertex_t_hist[1][0][0][2]->Fill(mom, new_time);
+    if (_cuts->IsPip(part))
+      vertex_t_hist[1][0][1][2]->Fill(mom, new_time);
+    else
+      vertex_t_hist[1][0][2][2]->Fill(mom, new_time);
+  } else if (charge == -1) {
+    vertex_t_hist[1][1][0][2]->Fill(mom, new_time);
+    if (_cuts->IsPim(part))
+      vertex_t_hist[1][1][1][2]->Fill(mom, new_time);
+    else
+      vertex_t_hist[1][1][2][2]->Fill(mom, new_time);
+  }
+  
+   if (charge == 1) {
+    vertex_t_hist[1][0][0][3]->Fill(mom, ft_time);
+    if (_cuts->IsPip(part))
+      vertex_t_hist[1][0][1][3]->Fill(mom, ft_time);
+    else
+      vertex_t_hist[1][0][2][3]->Fill(mom, ft_time);
+  } else if (charge == -1) {
+    vertex_t_hist[1][1][0][3]->Fill(mom, ft_time);
+    if (_cuts->IsPim(part))
+      vertex_t_hist[1][1][1][3]->Fill(mom, ft_time);
+    else
+      vertex_t_hist[1][1][2][3]->Fill(mom, ft_time);
+  }
+ 
+  
+  
 }
 
 void Histogram::Fill_deltat_prot(const std::shared_ptr<Branches12>& data, const std::shared_ptr<Delta_T>& dt,
@@ -1386,6 +1468,57 @@ void Histogram::Fill_deltat_prot(const std::shared_ptr<Branches12>& data, const 
     else
       delta_t_hist[2][1][2][3]->Fill(mom, ft_time);
   }
+  
+  if (fc)
+    time = dt->vt_ctof_P();
+  else
+    time = dt->vt_P();
+
+  if (charge == 1) {
+    vertex_t_hist[2][0][0][fc]->Fill(mom, time);
+    if (_cuts->IsPip(part))
+      vertex_t_hist[2][0][1][fc]->Fill(mom, time);
+    else
+      vertex_t_hist[2][0][2][fc]->Fill(mom, time);
+  } else if (charge == -1) {
+    vertex_t_hist[2][1][0][fc]->Fill(mom, time);
+    if (_cuts->IsPim(part))
+      vertex_t_hist[2][1][1][fc]->Fill(mom, time);
+    else
+      vertex_t_hist[2][1][2][fc]->Fill(mom, time);
+  }
+  
+  new_time = dt->_new_vt(part);
+  ft_time = dt->_new_ft_vt(part);
+  
+  if (charge == 1) {
+    vertex_t_hist[2][0][0][2]->Fill(mom, new_time);
+    if (_cuts->IsPip(part))
+      vertex_t_hist[2][0][1][2]->Fill(mom, new_time);
+    else
+      vertex_t_hist[2][0][2][2]->Fill(mom, new_time);
+  } else if (charge == -1) {
+    vertex_t_hist[2][1][0][2]->Fill(mom, new_time);
+    if (_cuts->IsPim(part))
+      vertex_t_hist[2][1][1][2]->Fill(mom, new_time);
+    else
+      vertex_t_hist[2][1][2][2]->Fill(mom, new_time);
+  }
+  
+   if (charge == 1) {
+    vertex_t_hist[2][0][0][3]->Fill(mom, ft_time);
+    if (_cuts->IsPip(part))
+      vertex_t_hist[2][0][1][3]->Fill(mom, ft_time);
+    else
+      vertex_t_hist[2][0][2][3]->Fill(mom, ft_time);
+  } else if (charge == -1) {
+    vertex_t_hist[2][1][0][3]->Fill(mom, ft_time);
+    if (_cuts->IsPim(part))
+      vertex_t_hist[2][1][1][3]->Fill(mom, ft_time);
+    else
+      vertex_t_hist[2][1][2][3]->Fill(mom, ft_time);
+  }
+  
 }
 
 // do
@@ -1416,7 +1549,7 @@ void Histogram::Write_deltat() {
       }
     }
   }
-  TDirectory* new_vt_folder = RootOutputFile->mkdir("new_vt");
+  TDirectory* new_vt_folder = RootOutputFile->mkdir("new_vt_dt");
   new_vt_folder->cd();
   for (short p = 0; p < particle_num; p++) {
     for (short c = 0; c < charge_num; c++) {
@@ -1424,11 +1557,11 @@ void Histogram::Write_deltat() {
         delta_t_hist[p][c][i][2]->SetXTitle("Momentum (GeV)");
         delta_t_hist[p][c][i][2]->SetYTitle("#Deltat");
         delta_t_hist[p][c][i][2]->SetOption("COLZ1");
-        if (delta_t_hist[p][c][i][2]->GetEntries() > 1) delta_t_hist[p][c][i][1]->Write();
+        if (delta_t_hist[p][c][i][2]->GetEntries() > 1) delta_t_hist[p][c][i][2]->Write();
       }
     }
   }
-  TDirectory* new_ft_vt_folder = RootOutputFile->mkdir("new_ft_vt");
+  TDirectory* new_ft_vt_folder = RootOutputFile->mkdir("ft_vt_dt");
   new_ft_vt_folder->cd();
   for (short p = 0; p < particle_num; p++) {
     for (short c = 0; c < charge_num; c++) {
@@ -1436,7 +1569,58 @@ void Histogram::Write_deltat() {
         delta_t_hist[p][c][i][3]->SetXTitle("Momentum (GeV)");
         delta_t_hist[p][c][i][3]->SetYTitle("#Deltat");
         delta_t_hist[p][c][i][3]->SetOption("COLZ1");
-        if (delta_t_hist[p][c][i][3]->GetEntries() > 1) delta_t_hist[p][c][i][1]->Write();
+        if (delta_t_hist[p][c][i][3]->GetEntries() > 1) delta_t_hist[p][c][i][3]->Write();
+      }
+    }
+  }
+    TDirectory* cal_vt_folder = RootOutputFile->mkdir("cal_vt");
+  cal_vt_folder->cd();
+  for (short p = 0; p < particle_num; p++) {
+    for (short c = 0; c < charge_num; c++) {
+      for (short i = 0; i < with_id_num; i++) {
+        vertex_t_hist[p][c][i][0]->SetXTitle("Momentum (GeV)");
+        vertex_t_hist[p][c][i][0]->SetYTitle("#Vertext");
+        vertex_t_hist[p][c][i][0]->SetOption("COLZ1");
+        if (vertex_t_hist[p][c][i][0]->GetEntries() > 1) vertex_t_hist[p][c][i][0]->Write();
+      }
+    }
+  }
+  
+  TDirectory* cal_ctof_vt_folder = RootOutputFile->mkdir("cal_ctof_vt");
+  cal_ctof_vt_folder->cd();
+  for (short p = 0; p < particle_num; p++) {
+    for (short c = 0; c < charge_num; c++) {
+      for (short i = 0; i < with_id_num; i++) {
+        vertex_t_hist[p][c][i][1]->SetXTitle("Momentum (GeV)");
+        vertex_t_hist[p][c][i][1]->SetYTitle("#Vertext");
+        vertex_t_hist[p][c][i][1]->SetOption("COLZ1");
+        if (vertex_t_hist[p][c][i][1]->GetEntries() > 1) vertex_t_hist[p][c][i][1]->Write();
+      }
+    }
+  }
+  
+  TDirectory* new_vt_vt_folder = RootOutputFile->mkdir("new_vt_vt");
+  new_vt_vt_folder->cd();
+  for (short p = 0; p < particle_num; p++) {
+    for (short c = 0; c < charge_num; c++) {
+      for (short i = 0; i < with_id_num; i++) {
+        vertex_t_hist[p][c][i][2]->SetXTitle("Momentum (GeV)");
+        vertex_t_hist[p][c][i][2]->SetYTitle("#Vertext");
+        vertex_t_hist[p][c][i][2]->SetOption("COLZ1");
+        if (vertex_t_hist[p][c][i][2]->GetEntries() > 1) vertex_t_hist[p][c][i][2]->Write();
+      }
+    }
+  }
+  
+  TDirectory* ft_vt_vt_folder = RootOutputFile->mkdir("ft_vt_vt");
+  ft_vt_vt_folder->cd();
+  for (short p = 0; p < particle_num; p++) {
+    for (short c = 0; c < charge_num; c++) {
+      for (short i = 0; i < with_id_num; i++) {
+        vertex_t_hist[p][c][i][3]->SetXTitle("Momentum (GeV)");
+        vertex_t_hist[p][c][i][3]->SetYTitle("#Vertext");
+        vertex_t_hist[p][c][i][3]->SetOption("COLZ1");
+        if (vertex_t_hist[p][c][i][3]->GetEntries() > 1) vertex_t_hist[p][c][i][3]->Write();
       }
     }
   }

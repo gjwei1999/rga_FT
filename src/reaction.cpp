@@ -23,7 +23,7 @@ Reaction::Reaction(const std::shared_ptr<Branches12>& data, float beam_energy) {
   _other = std::make_unique<TLorentzVector>();
   _neutron = std::make_unique<TLorentzVector>();
 
-  _weight = // _data->mc_weight();  //
+  _weight =  //_data->mc_weight();  //
       1.0;
 }
 
@@ -75,13 +75,13 @@ void Reaction::SetNeutron(int i) {
 }
 
 void Reaction::SetOther(int i) {
-  if (_data->pid(i) == NEUTRON && abs(_data->ft_chi2pid(i)) < 0.5)
+  if (_data->ft_pid(i) == NEUTRON && abs(_data->ft_chi2pid(i)) < 0.5)
     SetNeutron(i);
   else {
     _numPart++;
     _numOther++;
     _hasOther = true;
-    _other->SetXYZM(_data->px(i), _data->py(i), _data->pz(i), mass[_data->pid(i)]);
+    _other->SetXYZM(_data->px(i), _data->py(i), _data->pz(i), mass[_data->ft_pid(i)]);
   }
 }
 

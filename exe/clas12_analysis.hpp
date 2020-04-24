@@ -75,7 +75,7 @@ size_t run(std::shared_ptr<TChain> _chain, std::shared_ptr<Histogram> _hists, in
     int i, k;
     k=0;
     for(i=0;i<num;i++){
-	if( (data->pid(i) ==ELECTRON) && !(data->ft_hodo_time(i)==NAN) ){        
+	if( (data->ft_pid(i) ==ELECTRON) && !(data->ft_hodo_time(i)==NAN) ){        
             data->_pos_of_elec = i;
             break;
         }
@@ -137,22 +137,22 @@ size_t run(std::shared_ptr<TChain> _chain, std::shared_ptr<Histogram> _hists, in
       
 
         for(i=0;i<num;i++){
-        if(data->pid(i) ==ELECTRON){
+        if(data->ft_pid(i) ==ELECTRON){
             electron_in_twopi++;
         }
-        else if(data->pid(i) ==PROTON){
+        else if(data->ft_pid(i) ==PROTON){
             prot_in_twopi++;
         }
-        else if(data->pid(i) ==PIP){
+        else if(data->ft_pid(i) ==PIP){
             pip_in_twopi++;
         }
-        else if(data->pid(i) ==PIM){
+        else if(data->ft_pid(i) ==PIM){
             pim_in_twopi++;
         }
-        else if(data->pid(i) ==NEUTRON){
+        else if(data->ft_pid(i) ==NEUTRON){
             neutron_in_twopi++;
         }
-        else if(data->pid(i) ==PHOTON){
+        else if(data->ft_pid(i) ==PHOTON){
             photon_in_twopi++;
         }
         else {

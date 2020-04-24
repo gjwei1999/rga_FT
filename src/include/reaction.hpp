@@ -174,9 +174,9 @@ class Reaction {
   inline short sec() { return _data->dc_sec(0); }
   inline int det() { return abs(_data->status(0) / 1000); }
 
-  //inline bool TwoPion() {
-  //  return ((_numPip == 1 && _numPim == 1) && (_hasE && _hasP && _hasPip && _hasPim && !_hasNeutron && !_hasOther));
-  //}
+//  inline bool TwoPion() {
+//    return ((_numPip == 1 && _numPim == 1) && (_hasE && _hasP && _hasPip && _hasPim && _hasNeutron && !_hasOther));
+//  }
   
   inline bool TwoPion() {
     return ((_numPip == 1 && _numPim == 1) && (_hasE && _hasP && _hasPip && _hasPim));
