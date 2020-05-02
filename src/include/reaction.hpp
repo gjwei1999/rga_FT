@@ -63,6 +63,11 @@ class Reaction {
   float _MM = NAN;
   float _MM2 = NAN;
 
+  float _nu;
+  float _theta_e;
+  float _epsilont;
+  float _flux;
+
   float _W = NAN;
   float _Q2 = NAN;
 
@@ -115,6 +120,9 @@ class Reaction {
 //    return  _data->mc_weight();  //
         //1.0;
 //  }
+
+  void epsilont();
+  float flux();
 
   float inv_Ppip();
   float inv_Ppim();

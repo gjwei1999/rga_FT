@@ -202,10 +202,10 @@ class Histogram {
   TH1D_ptr W_hist_twoPi;
   TH1D_ptr Q2_hist_twoPi;
   TH2D_ptr W_vs_q2_twoPi;
-  //
-  //
-  //
-  //modified by Jiawei
+  
+  TH1D_ptr W_photon_twoPi;
+
+
   TH1D_ptr invmass_Ppip_twoPi;
   TH1D_ptr invmass_Ppim_twoPi;
   TH1D_ptr invmass_pippim_twoPi;

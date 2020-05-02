@@ -98,10 +98,8 @@ Histogram::Histogram(const std::string& output_file) {
   Q2_hist_twoPi = std::make_shared<TH1D>("Q2_twoPi", "Q2_twoPi", bins, zero, q2_max);
   W_vs_q2_twoPi = std::make_shared<TH2D>("W_vs_q2_twoPi", "W_vs_q2_twoPi", bins, zero, w_max, bins, zero, q2_max);
 
-
-  /////
-  /////
-  /////modified by Jiawei
+  W_photon_twoPi = std::make_shared<TH1D>("W_photon_twoPi", "W_photon_twoPi", bins, zero, w_max);
+  
   invmass_Ppip_twoPi = std::make_shared<TH1D>("invmass_Ppip_twoPi", "invmass_Ppip_twoPi", bins, 1.0, 3.5);
   invmass_Ppim_twoPi = std::make_shared<TH1D>("invmass_Ppim_twoPi", "invmass_Ppim_twoPi", bins, 1.0, 3.5);
   invmass_pippim_twoPi = std::make_shared<TH1D>("invmass_pippim_twoPi", "invmass_pippim_twoPi", bins, 0.0, 2.5);
@@ -322,8 +320,9 @@ void Histogram::Fill_WvsQ2_twoPi(const std::shared_ptr<Reaction>& _e) {
   //std::cout<<"missmass2   "<<_e->MM2()<<std::endl;
   //std::cout<<"weight   "<<_e->weight()<<std::endl;
   //
-  //
-  //modified by Jiawei
+ 
+  W_photon_twoPi->Fill(_e->W(), _e->weight()/_e->flux());
+ 
   invmass_Ppip_twoPi->Fill(_e->inv_Ppip(), _e->weight());
   invmass_Ppim_twoPi->Fill( _e->inv_Ppim(), _e->weight());
   invmass_pippim_twoPi->Fill(_e->inv_pip_pim(), _e->weight());
@@ -343,9 +342,7 @@ void Histogram::Fill_WvsQ2_twoPi(const std::shared_ptr<Reaction>& _e) {
   theta_vs_phi_Prot_twoPi->Fill(_e->prot_phi_lab(), _e->prot_theta_lab(), _e->weight());
   theta_vs_phi_pip_twoPi->Fill( _e->pip_phi_lab(), _e->pip_theta_lab(), _e->weight());
   theta_vs_phi_pim_twoPi->Fill( _e->pim_phi_lab(), _e->pim_theta_lab(), _e->weight());
-  //
-  //
-  //
+  
 
   
   //theta_prot->Fill(_e->prot_theta(), _e->weight());
@@ -669,11 +666,10 @@ void Histogram::Write_WvsQ2() {
   MM2_twoPi->SetXTitle("MM2_twoPi (GeV)");
   if (MM2_twoPi->GetEntries()) MM2_twoPi->Write();
   
-  //
-  //
-  //modified by Jiawei
-  //Q2_thrown->Fill(_e->Q2_mc(), _e->weight());
-  
+  W_photon_twoPi->SetXTitle("W (GeV)");
+  W_photon_twoPi->SetTitle("virtual phto-production #sigma");
+  if (W_photon_twoPi->GetEntries()) W_photon_twoPi->Write();
+
   //invmass_Ppip_twoPi_thrown->Fill(_e->MCinv_Ppip(), _e->weight());
   
   //invmass_Ppim_twoPi_thrown->Fill(_e->MCinv_Ppim(), _e->weight());

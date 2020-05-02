@@ -134,7 +134,7 @@ bool Cuts::IsPip(int i) {
   //_pip &= ( (_dt->dt_Pi(i)<8.0 && _dt->dt_Pi(i)> 4.0 ) || (_dt->dt_ctof_Pi(i)<8.0 && _dt->dt_ctof_Pi(i)>4.0) );
   
 
- // _pip &= (abs(_dt->dt_Pi(i)) < 0.5 || abs(_dt->dt_ctof_Pi(i)) < 0.5);
+  _pip &= (abs(_dt->dt_Pi(i)) < 0.5 || abs(_dt->dt_ctof_Pi(i)) < 0.5);
   //_pip &= !(abs(_dt->dt_P(i)) < 0.5 || abs(_dt->dt_ctof_P(i)) < 0.2);
   _pip &= (_data->ft_pid(i) == PIP);
   //_pip &= (abs(_data->chi2pid(i)) < 0.5);
@@ -149,7 +149,7 @@ bool Cuts::IsProton(int i) {
 
   
   
- // _proton &= (abs(_dt->dt_P(i)) < 0.5 || abs(_dt->dt_ctof_P(i)) < 0.5);
+  _proton &= (abs(_dt->dt_P(i)) < 0.5 || abs(_dt->dt_ctof_P(i)) < 0.5);
   //_proton &= !(abs(_dt->dt_Pi(i)) < 0.05 || abs(_dt->dt_ctof_Pi(i)) < 0.02);
   _proton &= (_data->ft_pid(i) == PROTON);
   //_proton &= (abs(_data->chi2pid(i)) < 0.5);
@@ -164,7 +164,7 @@ bool Cuts::IsPim(int i) {
  // _pim &= ( (_dt->dt_Pi(i)<0.5 && _dt->dt_Pi(i)> 0.5 ) || (_dt->dt_ctof_Pi(i)<0.5 && _dt->dt_ctof_Pi(i)>4.0) );
   
 
- // _pim &= (abs(_dt->dt_Pi(i)) < 0.5 || abs(_dt->dt_ctof_Pi(i)) < 0.5);
+  _pim &= (abs(_dt->dt_Pi(i)) < 0.5 || abs(_dt->dt_ctof_Pi(i)) < 0.5);
   _pim &= (_data->ft_pid(i) == PIM);
   //_pim &= (abs(_data->chi2pid(i)) < 0.5);
   return _pim;

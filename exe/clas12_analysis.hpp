@@ -127,6 +127,7 @@ size_t run(std::shared_ptr<TChain> _chain, std::shared_ptr<Histogram> _hists, in
       } else {
         event->SetOther(part);
       }
+       event->epsilont();
     }
     // Check the reaction class what kind of even it is and fill the appropriate histograms
     _hists->Fill_histSevenD(event);
@@ -162,7 +163,7 @@ size_t run(std::shared_ptr<TChain> _chain, std::shared_ptr<Histogram> _hists, in
             others_in_twopi++;
         }
     }
-//      if( abs(event->MM2()) >0.05) {continue;}  
+      if( abs(event->MM2()) >0.05) {continue;}  
       _hists->Fill_WvsQ2_twoPi(event);
       total_twopi++;
     }
