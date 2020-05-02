@@ -66,26 +66,29 @@ size_t run(std::shared_ptr<TChain> _chain, std::shared_ptr<Histogram> _hists, in
     //  _hists->FillHists_electron_cuts(event, data->ec_tot_energy(0), data->p(0));
     auto event = std::make_shared<Reaction>(data, beam_energy);
 
-
  
     // find the position of electron
     int num;
 
     num = data->gpart();
-    int i, k;
+    int i, k, j;
     k=0;
+    j=0;
     for(i=0;i<num;i++){
-	if( (data->ft_pid(i) ==ELECTRON) && !(data->ft_hodo_time(i)==NAN) ){        
+	if( (data->ft_pid(i) == ELECTRON) && !std::isnan(data->ft_hodo_time(i)) ){        
             data->_pos_of_elec = i;
-            break;
-        }
-        else{
             k++;
         }
+	if(data->ft_pid(i) == ELECTRON){
+	j++;
+	}
     }
-    if(k==num) continue;   //k==num there is no electron in the entry
-    
-//  if (data->charge(data->_pos_of_elec) == -1) _hists->FillHists_pionp_cuts(data);
+    if(k!=1) continue;   //only 1 electron
+    if(j!=1) continue;
+
+    event->SetElec();    
+
+    if (data->charge(data->_pos_of_elec) == -1) _hists->FillHists_elec_cuts(data);
 //  if (data->charge(0) == -1) _hists->FillHists_electron_cuts(data);
    
    auto cuts = std::make_shared<Cuts>(data);
@@ -111,7 +114,7 @@ size_t run(std::shared_ptr<TChain> _chain, std::shared_ptr<Histogram> _hists, in
       _hists->Fill_deltat_pi(data, dt, part);
       _hists->Fill_deltat_prot(data, dt, part);
       //_hists->Fill_deltat_positive(data, dt, event, part);
-      _hists->FillHists_pionp_with_cuts(data);
+      _hists->FillHists_elec_with_cuts(data);
 
       // Check particle ID's and fill the reaction class
 
@@ -159,7 +162,7 @@ size_t run(std::shared_ptr<TChain> _chain, std::shared_ptr<Histogram> _hists, in
             others_in_twopi++;
         }
     }
-        
+//      if( abs(event->MM2()) >0.05) {continue;}  
       _hists->Fill_WvsQ2_twoPi(event);
       total_twopi++;
     }

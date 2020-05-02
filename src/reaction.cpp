@@ -15,7 +15,7 @@ Reaction::Reaction(const std::shared_ptr<Branches12>& data, float beam_energy) {
   _gamma = std::make_unique<TLorentzVector>();
   _target = std::make_unique<TLorentzVector>(0.0, 0.0, 0.0, MASS_P);
   _elec = std::make_unique<TLorentzVector>();
-  this->SetElec();
+//  this->SetElec();
   _prot = std::make_unique<TLorentzVector>();
   _x_mu = std::make_unique<TLorentzVector>();
   _pip = std::make_unique<TLorentzVector>();
@@ -23,14 +23,15 @@ Reaction::Reaction(const std::shared_ptr<Branches12>& data, float beam_energy) {
   _other = std::make_unique<TLorentzVector>();
   _neutron = std::make_unique<TLorentzVector>();
 
-  _weight =  //_data->mc_weight();  //
-      1.0;
+  _weight = // _data->mc_weight();  //
+     1.0;
 }
 
 Reaction::~Reaction() {}
 
 void Reaction::SetElec() {
   _numPart++;
+  _numElec++;
   _hasE = true;
   _elec->SetXYZM(_data->px(_data->_pos_of_elec), _data->py(_data->_pos_of_elec), _data->pz(_data->_pos_of_elec), MASS_E);
 

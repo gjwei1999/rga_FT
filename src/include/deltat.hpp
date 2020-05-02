@@ -42,8 +42,8 @@ class Delta_T {
   float _vertex_time(float sc_time, float sc_pathlength, float relatavistic_beta);
   float _deltat(int num);
   float _ctof_deltat(int ft_pid);
-  float _vertext(int pid);
-  float _ctof_vertext(int pid);
+  float _vertext(int ft_pid);
+  float _ctof_vertext(int ft_pid);
 
  public:
   Delta_T(std::shared_ptr<Branches12> data);
@@ -80,6 +80,7 @@ class Delta_T {
 
   float vt_ctof_P(); 
   float vt_ctof_Pi(); 
+  float vt_elec();
 
   float momentum();
   bool ctof();

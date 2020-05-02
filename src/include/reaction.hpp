@@ -49,6 +49,7 @@ class Reaction {
   bool _hasNeutron = false;
 
   short _numPart = 0;
+  short _numElec = 0;
   short _numProt = 0;
   short _numPip = 0;
   short _numPim = 0;
@@ -82,7 +83,7 @@ class Reaction {
   float _alpha_pippim_pipf = NAN;
   float _alpha_ppim_pipip = NAN;
 
-  void SetElec();
+//  void SetElec();
 
  public:
   Reaction(){};
@@ -90,6 +91,7 @@ class Reaction {
   ~Reaction();
 
   inline bool mc() { return _mc; }
+  void SetElec();  
   void SetProton(int i);
   void SetPip(int i);
   void SetPim(int i);
@@ -174,13 +176,13 @@ class Reaction {
   inline short sec() { return _data->dc_sec(0); }
   inline int det() { return abs(_data->status(0) / 1000); }
 
-//  inline bool TwoPion() {
-//    return ((_numPip == 1 && _numPim == 1) && (_hasE && _hasP && _hasPip && _hasPim && _hasNeutron && !_hasOther));
-//  }
-  
   inline bool TwoPion() {
-    return ((_numPip == 1 && _numPim == 1) && (_hasE && _hasP && _hasPip && _hasPim));
+    return ((_numPip == 1 && _numPim == 1 && _numProt == 1) );
   }
+  
+//  inline bool TwoPion() {
+//    return ((_numPip == 1 && _numPim == 1) && (_hasE && _hasP && _hasPip && _hasPim));
+//  }
 
   inline bool ProtonPim() {
     return ((_numProt == 1 && _numPim == 1) && (_hasE && _hasP && !_hasPip && _hasPim && !_hasNeutron && !_hasOther));

@@ -270,8 +270,10 @@ class Histogram {
   // Delta T
 
   TH2D_ptr vertex_t_hist[particle_num][charge_num][with_id_num][4];
-  
- public:
+  TH2D_ptr vertex_t_elec;  
+  TH2D_ptr vertex_t_elec_vt;
+  TH2D_ptr vertex_t_elec_ft_vt; 
+public:
   Histogram(const std::string& output_file);
   ~Histogram();
   void Fill_histSevenD(const std::shared_ptr<Reaction>& _e);
@@ -292,11 +294,11 @@ class Histogram {
   void Fill_inv_mass_hist();
   // P and E
   // ecectron cuts
-  void makeHists_pionp_cuts();
-  void FillHists_pionp_cuts(const std::shared_ptr<Branches12>& _d);
-  void FillHists_pionp_with_cuts(const std::shared_ptr<Branches12>& _d);
+  void makeHists_elec_cuts();
+  void FillHists_elec_cuts(const std::shared_ptr<Branches12>& _d);
+  void FillHists_elec_with_cuts(const std::shared_ptr<Branches12>& _d);
 
-  void Write_pionp_cuts();
+  void Write_elec_cuts();
 
   // sampling 
 

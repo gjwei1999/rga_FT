@@ -133,7 +133,7 @@ Histogram::Histogram(const std::string& output_file) {
   makeHists_sector();
   makeHists_deltat();
   makeHists_MomVsBeta();
-  makeHists_pionp_cuts();
+  makeHists_elec_cuts();
 }
 
 Histogram::~Histogram() { this->Write(); }
@@ -159,10 +159,10 @@ void Histogram::Write() {
   Write_MomVsBeta_folder->cd();
   Write_MomVsBeta();
 
-  std::cerr << BOLDBLUE << "Write_pionp_cuts()" << DEF << std::endl;
-  TDirectory* Pionp_Cuts = RootOutputFile->mkdir("Pionp_Cuts");
-  Pionp_Cuts->cd();
-  Write_pionp_cuts();
+  std::cerr << BOLDBLUE << "Write_elec_cuts()" << DEF << std::endl;
+  TDirectory* Elec_Cuts = RootOutputFile->mkdir("Elec_Cuts");
+  Elec_Cuts->cd();
+  Write_elec_cuts();
 
   std::cerr << BOLDBLUE << "Write_deltat()" << DEF << std::endl;
   // TDirectory* Write_deltat_folder = RootOutputFile->mkdir("Delta_t");
@@ -987,7 +987,7 @@ void Histogram::Write_WvsQ2() {
     MM_Npip_sec[i]->Write();
   }
 }
-void Histogram::makeHists_pionp_cuts() {
+void Histogram::makeHists_elec_cuts() {
   for (auto&& cut : before_after_cut) {
     int c = cut.first;
     auto type = cut.second.c_str();
@@ -1008,38 +1008,39 @@ void Histogram::makeHists_pionp_cuts() {
     ft_cal_xy[c] = std::make_shared<TH2D>(Form("ft_cal_xy%s", type), Form("ft_cal_xy%s", type), bins, -25, 25, bins, -25, 25);
   }
 }
-void Histogram::FillHists_pionp_cuts(const std::shared_ptr<Branches12>& _d) {
-  vz_position[before_cut]->Fill(_d->vz(0));
-  pcal_sec[before_cut]->Fill(_d->ec_pcal_x(0), _d->ec_pcal_y(0));
-  dcr1_sec[before_cut]->Fill(_d->dc_r1_x(0), _d->dc_r1_y(0));
-  dcr2_sec[before_cut]->Fill(_d->dc_r2_x(0), _d->dc_r2_y(0));
-  dcr3_sec[before_cut]->Fill(_d->dc_r3_x(0), _d->dc_r3_y(0));
-  EC_sampling_fraction[before_cut]->Fill(_d->p(0), _d->ec_tot_energy(0) / _d->p(0));
+void Histogram::FillHists_elec_cuts(const std::shared_ptr<Branches12>& _d) {
+  vz_position[before_cut]->Fill(_d->vz(_d->_pos_of_elec));
+  //pcal_sec[before_cut]->Fill(_d->ec_pcal_x(0), _d->ec_pcal_y(0));
+  //dcr1_sec[before_cut]->Fill(_d->dc_r1_x(0), _d->dc_r1_y(0));
+  //dcr2_sec[before_cut]->Fill(_d->dc_r2_x(0), _d->dc_r2_y(0));
+  //dcr3_sec[before_cut]->Fill(_d->dc_r3_x(0), _d->dc_r3_y(0));
+  //EC_sampling_fraction[before_cut]->Fill(_d->p(0), _d->ec_tot_energy(0) / _d->p(0));
   
   ft_cal_E_vs_p[before_cut]->Fill(_d->p(_d->_pos_of_elec), _d->ft_cal_energy(_d->_pos_of_elec));
   ft_cal_xy[before_cut]->Fill(_d->ft_cal_x(_d->_pos_of_elec), _d->ft_cal_y(_d->_pos_of_elec));
 }
 
-void Histogram::FillHists_pionp_with_cuts(const std::shared_ptr<Branches12>& _d) {
-  vz_position[after_cut]->Fill(_d->vz(0));
-  pcal_sec[after_cut]->Fill(_d->ec_pcal_x(0), _d->ec_pcal_y(0));
-  dcr1_sec[after_cut]->Fill(_d->dc_r1_x(0), _d->dc_r1_y(0));
-  dcr2_sec[after_cut]->Fill(_d->dc_r2_x(0), _d->dc_r2_y(0));
-  dcr3_sec[after_cut]->Fill(_d->dc_r3_x(0), _d->dc_r3_y(0));
-  EC_sampling_fraction[after_cut]->Fill(_d->p(0), _d->ec_tot_energy(0) / _d->p(0));
+void Histogram::FillHists_elec_with_cuts(const std::shared_ptr<Branches12>& _d) {
+  vz_position[after_cut]->Fill(_d->vz(_d->_pos_of_elec));
+  //pcal_sec[after_cut]->Fill(_d->ec_pcal_x(0), _d->ec_pcal_y(0));
+  //dcr1_sec[after_cut]->Fill(_d->dc_r1_x(0), _d->dc_r1_y(0));
+  //dcr2_sec[after_cut]->Fill(_d->dc_r2_x(0), _d->dc_r2_y(0));
+  //dcr3_sec[after_cut]->Fill(_d->dc_r3_x(0), _d->dc_r3_y(0));
+  //EC_sampling_fraction[after_cut]->Fill(_d->p(0), _d->ec_tot_energy(0) / _d->p(0));
   
   ft_cal_E_vs_p[after_cut]->Fill(_d->p(_d->_pos_of_elec), _d->ft_cal_energy(_d->_pos_of_elec));
   ft_cal_xy[after_cut]->Fill(_d->ft_cal_x(_d->_pos_of_elec), _d->ft_cal_y(_d->_pos_of_elec));
 }
 
-void Histogram::Write_pionp_cuts() {
+void Histogram::Write_elec_cuts() {
   for (auto&& cut : before_after_cut) {
     int c = cut.first;
     vz_position[c]->SetXTitle("vz (GeV)");
     vz_position[c]->Fit("gaus", "QMR+", "QMR+", -7.089, 2.0);
     gStyle->SetOptFit(1111);
     if (vz_position[c]->GetEntries()) vz_position[c]->Write();
-    pcal_sec[c]->SetXTitle("x (cm)");
+ 
+/*    pcal_sec[c]->SetXTitle("x (cm)");
     pcal_sec[c]->SetYTitle("y (cm)");
     pcal_sec[c]->SetOption("COLZ1");
     if (pcal_sec[c]->GetEntries()) pcal_sec[c]->Write();
@@ -1058,17 +1059,17 @@ void Histogram::Write_pionp_cuts() {
     dcr3_sec[c]->SetYTitle("y (cm)");
     dcr3_sec[c]->SetOption("COLZ1");
     if (dcr3_sec[c]->GetEntries()) dcr3_sec[c]->Write();
-    
+*/    
     ft_cal_xy[c]->SetXTitle("x (cm)");
     ft_cal_xy[c]->SetYTitle("y (cm)");
     ft_cal_xy[c]->SetOption("COLZ1");
     if (ft_cal_xy[c]->GetEntries()) ft_cal_xy[c]->Write();
-
+/*
     EC_sampling_fraction[c]->SetXTitle("Momentum (GeV)");
     EC_sampling_fraction[c]->SetYTitle("Sampling Fraction");
     EC_sampling_fraction[c]->SetOption("COLZ1");
     EC_sampling_fraction[c]->Write();
-    
+*/    
     ft_cal_E_vs_p[c]->SetXTitle("Momentum (GeV)");
     ft_cal_E_vs_p[c]->SetYTitle("Energy(GeV)");
     ft_cal_E_vs_p[c]->SetOption("COLZ1");
@@ -1227,6 +1228,10 @@ void Histogram::makeHists_sector() {
 }
 
 void Histogram::makeHists_deltat() {
+  vertex_t_elec = std::make_shared<TH2D>("vertex_t_elec","vertex_t_elec",bins, 0, 3.0, bins, 70.0, 110.0);
+  vertex_t_elec_vt = std::make_shared<TH2D>("vertex_t_elec_vt","vertex_t_elec_vt",bins, 0, 3.0, bins, 80.0, 100.0);
+  vertex_t_elec_ft_vt = std::make_shared<TH2D>("vertex_t_elec_ft_vt","vertex_t_elec_ft_vt",bins, 0, 3.0, bins, 80.0, 100.0);
+ 
   std::string tof = "";
   for (short p = 0; p < particle_num; p++) {
     for (short c = 0; c < charge_num; c++) {
@@ -1237,7 +1242,7 @@ void Histogram::makeHists_deltat() {
                                         charge_name[c].c_str(), id_name[i].c_str()),
                                    Form("#Deltat %s %s %s %s", tof.c_str(), particle_name[p].c_str(),
                                         charge_name[c].c_str(), id_name[i].c_str()),
-                                   bins, p_min, p_max, bins, Dt_min, Dt_max);
+                                   bins, p_min, p_max, bins, -4.0, 4.0);
 
         tof = "ctof";
         delta_t_hist[p][c][i][1] =
@@ -1245,7 +1250,7 @@ void Histogram::makeHists_deltat() {
                                         charge_name[c].c_str(), id_name[i].c_str()),
                                    Form("#Deltat %s %s %s %s", tof.c_str(), particle_name[p].c_str(),
                                         charge_name[c].c_str(), id_name[i].c_str()),
-                                   bins, 0, 3.0, bins, -10.0, 15.0);
+                                   bins, 0, 3.0, bins, -4.0, 4.0);
         tof = "new_vt_dt";
         delta_t_hist[p][c][i][2] =
             std::make_shared<TH2D>(Form("delta_t_%s_%s_%s_%s", tof.c_str(), particle_name[p].c_str(),
@@ -1298,7 +1303,7 @@ void Histogram::Fill_deltat_pi(const std::shared_ptr<Branches12>& data, const st
   auto _cuts = std::make_unique<Cuts>(data, dt);
   int charge = data->charge(part);
   bool fc = dt->ctof();
-  int pid = data->pid(part);
+  int ft_pid = data->ft_pid(part);
   float mom = data->p(part);
   float time = NAN;
   float new_time = NAN;
@@ -1404,8 +1409,10 @@ void Histogram::Fill_deltat_pi(const std::shared_ptr<Branches12>& data, const st
       vertex_t_hist[1][1][2][3]->Fill(mom, ft_time);
   }
  
-  
-  
+ //std::cout<<"vt_elec = "<<dt->vt_elec()<<std::endl; 
+ vertex_t_elec->Fill(mom, dt->vt_elec()); 
+ vertex_t_elec_vt->Fill(mom, dt->_new_vt(part));
+ vertex_t_elec_ft_vt->Fill(mom, dt->_new_ft_vt(part));
 }
 
 void Histogram::Fill_deltat_prot(const std::shared_ptr<Branches12>& data, const std::shared_ptr<Delta_T>& dt,
@@ -1413,7 +1420,7 @@ void Histogram::Fill_deltat_prot(const std::shared_ptr<Branches12>& data, const 
   auto _cuts = std::make_unique<Cuts>(data, dt);
   int charge = data->charge(part);
   bool fc = dt->ctof();
-  int pid = data->pid(part);
+  int ft_pid = data->ft_pid(part);
   float mom = data->p(part);
   float time = NAN;
   float new_time = NAN;
@@ -1432,7 +1439,7 @@ void Histogram::Fill_deltat_prot(const std::shared_ptr<Branches12>& data, const 
       delta_t_hist[2][0][2][fc]->Fill(mom, time);
 
     delta_t_hist[2][1][0][fc]->Fill(mom, time);
-    if (pid == PROTON)
+    if (ft_pid == PROTON)
       delta_t_hist[2][1][1][fc]->Fill(mom, time);
     else
       delta_t_hist[2][1][2][fc]->Fill(mom, time);
@@ -1449,7 +1456,7 @@ void Histogram::Fill_deltat_prot(const std::shared_ptr<Branches12>& data, const 
       delta_t_hist[2][0][2][2]->Fill(mom, new_time);
 
     delta_t_hist[2][1][0][2]->Fill(mom, new_time);
-    if (pid == PROTON)
+    if (ft_pid == PROTON)
       delta_t_hist[2][1][1][2]->Fill(mom, new_time);
     else
       delta_t_hist[2][1][2][2]->Fill(mom, new_time);
@@ -1463,7 +1470,7 @@ void Histogram::Fill_deltat_prot(const std::shared_ptr<Branches12>& data, const 
       delta_t_hist[2][0][2][3]->Fill(mom, ft_time);
 
     delta_t_hist[2][1][0][3]->Fill(mom, ft_time);
-    if (pid == PROTON)
+    if (ft_pid == PROTON)
       delta_t_hist[2][1][1][3]->Fill(mom, ft_time);
     else
       delta_t_hist[2][1][2][3]->Fill(mom, ft_time);
@@ -1476,13 +1483,13 @@ void Histogram::Fill_deltat_prot(const std::shared_ptr<Branches12>& data, const 
 
   if (charge == 1) {
     vertex_t_hist[2][0][0][fc]->Fill(mom, time);
-    if (_cuts->IsPip(part))
+    if (_cuts->IsProton(part))
       vertex_t_hist[2][0][1][fc]->Fill(mom, time);
     else
       vertex_t_hist[2][0][2][fc]->Fill(mom, time);
-  } else if (charge == -1) {
+    
     vertex_t_hist[2][1][0][fc]->Fill(mom, time);
-    if (_cuts->IsPim(part))
+    if (ft_pid == PROTON)
       vertex_t_hist[2][1][1][fc]->Fill(mom, time);
     else
       vertex_t_hist[2][1][2][fc]->Fill(mom, time);
@@ -1493,13 +1500,13 @@ void Histogram::Fill_deltat_prot(const std::shared_ptr<Branches12>& data, const 
   
   if (charge == 1) {
     vertex_t_hist[2][0][0][2]->Fill(mom, new_time);
-    if (_cuts->IsPip(part))
+    if (_cuts->IsProton(part))
       vertex_t_hist[2][0][1][2]->Fill(mom, new_time);
     else
       vertex_t_hist[2][0][2][2]->Fill(mom, new_time);
-  } else if (charge == -1) {
+    
     vertex_t_hist[2][1][0][2]->Fill(mom, new_time);
-    if (_cuts->IsPim(part))
+    if (ft_pid == PROTON)
       vertex_t_hist[2][1][1][2]->Fill(mom, new_time);
     else
       vertex_t_hist[2][1][2][2]->Fill(mom, new_time);
@@ -1507,13 +1514,13 @@ void Histogram::Fill_deltat_prot(const std::shared_ptr<Branches12>& data, const 
   
    if (charge == 1) {
     vertex_t_hist[2][0][0][3]->Fill(mom, ft_time);
-    if (_cuts->IsPip(part))
+    if (_cuts->IsProton(part))
       vertex_t_hist[2][0][1][3]->Fill(mom, ft_time);
     else
       vertex_t_hist[2][0][2][3]->Fill(mom, ft_time);
-  } else if (charge == -1) {
+    
     vertex_t_hist[2][1][0][3]->Fill(mom, ft_time);
-    if (_cuts->IsPim(part))
+    if (ft_pid == PROTON)
       vertex_t_hist[2][1][1][3]->Fill(mom, ft_time);
     else
       vertex_t_hist[2][1][2][3]->Fill(mom, ft_time);
@@ -1585,7 +1592,21 @@ void Histogram::Write_deltat() {
       }
     }
   }
-  
+    vertex_t_elec->SetXTitle("Momentum (GeV)");
+    vertex_t_elec->SetYTitle("#Vertext");
+    vertex_t_elec->SetOption("COLZ1");
+    if (vertex_t_elec->GetEntries() > 1) vertex_t_elec->Write();
+ 
+    vertex_t_elec_vt->SetXTitle("Momentum (GeV)");
+    vertex_t_elec_vt->SetYTitle("#Vertext");
+    vertex_t_elec_vt->SetOption("COLZ1");
+    if (vertex_t_elec_vt->GetEntries() > 1) vertex_t_elec_vt->Write();
+ 
+    vertex_t_elec_ft_vt->SetXTitle("Momentum (GeV)");
+    vertex_t_elec_ft_vt->SetYTitle("#Vertext");
+    vertex_t_elec_ft_vt->SetOption("COLZ1");
+    if (vertex_t_elec_ft_vt->GetEntries() > 1) vertex_t_elec_ft_vt->Write();
+
   TDirectory* cal_ctof_vt_folder = RootOutputFile->mkdir("cal_ctof_vt");
   cal_ctof_vt_folder->cd();
   for (short p = 0; p < particle_num; p++) {
@@ -1645,7 +1666,7 @@ void Histogram::Fill_MomVsBeta(const std::shared_ptr<Branches12>& data, int part
   float beta = data->beta(part);
   float mom = data->p(part);
   int charge = data->charge(part);
-  int pid = data->pid(part);
+  int ft_pid = data->ft_pid(part);
   if (beta != 0) {
     momentum->Fill(mom);
     for (short p = 0; p < particle_num; p++) {
@@ -1665,7 +1686,7 @@ void Histogram::Fill_MomVsBeta(const std::shared_ptr<Branches12>& data, int part
       }
 
       momvsbeta_hist[p][0][0]->Fill(mom, beta);
-      if (good_ID == abs(pid)) {
+      if (good_ID == abs(ft_pid)) {
         momvsbeta_hist[p][0][1]->Fill(mom, beta);
       } else {
         momvsbeta_hist[p][0][2]->Fill(mom, beta);
@@ -1673,14 +1694,14 @@ void Histogram::Fill_MomVsBeta(const std::shared_ptr<Branches12>& data, int part
 
       if (charge == -1) {
         momvsbeta_hist[p][2][0]->Fill(mom, beta);
-        if (-good_ID == pid) {
+        if (-good_ID == ft_pid) {
           momvsbeta_hist[p][2][1]->Fill(mom, beta);
         } else {
           momvsbeta_hist[p][2][2]->Fill(mom, beta);
         }
       } else if (charge == 1) {
         momvsbeta_hist[p][1][0]->Fill(mom, beta);
-        if (good_ID == pid) {
+        if (good_ID == ft_pid) {
           momvsbeta_hist[p][1][1]->Fill(mom, beta);
         } else {
           momvsbeta_hist[p][1][2]->Fill(mom, beta);

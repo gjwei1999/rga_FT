@@ -46,7 +46,7 @@ bool Cuts::ElectronCuts() {
   //_elec &= (_data->beta(0) > 0.05);
 //  _elec &= (_data->p(_data->_pos_of_elec) > 1.0);
 //  _elec &= (2000 <= abs(_data->status(_data->_pos_of_elec)) && abs(_data->status(_data->_pos_of_elec)) < 4000);
-//  _elec &= (_data->vz(_data->_pos_of_elec) > -(2.78 + 2 * 2.16) && _data->vz(_data->_pos_of_elec) < (-2.78 + 2 * 2.16));  // 3 sigma cut
+//  _elec &= (_data->vz(_data->_pos_of_elec) > -(3.844 + 3 * 2.354) && _data->vz(_data->_pos_of_elec) < (-3.844 + 3 * 2.354));  // 3 sigma cut
 
 /*  
    // Use the chi2pid instead of straight line cuts on SF
@@ -131,12 +131,10 @@ bool Cuts::IsPip(int i) {
   if (_data->gpart() <= i) return false;
   bool _pip = true;
   _pip &= (_data->charge(i) == POSITIVE);
-
-
   //_pip &= ( (_dt->dt_Pi(i)<8.0 && _dt->dt_Pi(i)> 4.0 ) || (_dt->dt_ctof_Pi(i)<8.0 && _dt->dt_ctof_Pi(i)>4.0) );
   
 
-  //_pip &= (abs(_dt->dt_Pi(i)) < 0.5 || abs(_dt->dt_ctof_Pi(i)) < 0.3);
+ // _pip &= (abs(_dt->dt_Pi(i)) < 0.5 || abs(_dt->dt_ctof_Pi(i)) < 0.5);
   //_pip &= !(abs(_dt->dt_P(i)) < 0.5 || abs(_dt->dt_ctof_P(i)) < 0.2);
   _pip &= (_data->ft_pid(i) == PIP);
   //_pip &= (abs(_data->chi2pid(i)) < 0.5);
@@ -146,13 +144,12 @@ bool Cuts::IsProton(int i) {
   if (_data->gpart() <= i) return false;
   bool _proton = true;
   _proton &= (_data->charge(i) == POSITIVE);
-    
  
   //_proton &= ( (_dt->dt_P(i)<8.0 && _dt->dt_P(i)> 4.0 ) || (_dt->dt_ctof_P(i)<8.0 && _dt->dt_ctof_P(i)>4.0) );
 
   
   
-  //_proton &= (abs(_dt->dt_P(i)) < 0.5 || abs(_dt->dt_ctof_P(i)) < 0.4);
+ // _proton &= (abs(_dt->dt_P(i)) < 0.5 || abs(_dt->dt_ctof_P(i)) < 0.5);
   //_proton &= !(abs(_dt->dt_Pi(i)) < 0.05 || abs(_dt->dt_ctof_Pi(i)) < 0.02);
   _proton &= (_data->ft_pid(i) == PROTON);
   //_proton &= (abs(_data->chi2pid(i)) < 0.5);
@@ -162,12 +159,12 @@ bool Cuts::IsPim(int i) {
   if (_data->gpart() <= i) return false;
   bool _pim = true;
   _pim &= (_data->charge(i) == NEGATIVE);
- 
 
-  //_pim &= ( (_dt->dt_Pi(i)<8.0 && _dt->dt_Pi(i)> 4.0 ) || (_dt->dt_ctof_Pi(i)<8.0 && _dt->dt_ctof_Pi(i)>4.0) );
+
+ // _pim &= ( (_dt->dt_Pi(i)<0.5 && _dt->dt_Pi(i)> 0.5 ) || (_dt->dt_ctof_Pi(i)<0.5 && _dt->dt_ctof_Pi(i)>4.0) );
   
 
-  //_pim &= (abs(_dt->dt_Pi(i)) < 0.5 || abs(_dt->dt_ctof_Pi(i)) < 0.5);
+ // _pim &= (abs(_dt->dt_Pi(i)) < 0.5 || abs(_dt->dt_ctof_Pi(i)) < 0.5);
   _pim &= (_data->ft_pid(i) == PIM);
   //_pim &= (abs(_data->chi2pid(i)) < 0.5);
   return _pim;

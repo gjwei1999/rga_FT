@@ -20,19 +20,26 @@ Delta_T::Delta_T(std::shared_ptr<Branches12> data) {
 //  }
 //  _vertex = _vertex_time(_sc_t_v, _sc_r_v, 1.0);
 
-  _hodo_t_v = _data->ft_hodo_time(_data->_pos_of_elec);
-  _hodo_r_v = _data->ft_hodo_path(_data->_pos_of_elec);
+//using hodoscope 
   
-  _ft_cal_t_v = _data->ft_cal_time(_data->_pos_of_elec);
-  _ft_cal_r_v = _data->ft_cal_time(_data->_pos_of_elec);
+//  _hodo_t_v = _data->ft_hodo_time(_data->_pos_of_elec);
+//  _hodo_r_v = _data->ft_hodo_path(_data->_pos_of_elec);
   
-  _ft_vt_ele = _data->ft_vt(_data->_pos_of_elec);
+//  _ft_cal_t_v = _data->ft_cal_time(_data->_pos_of_elec);
+//  _ft_cal_r_v = _data->ft_cal_time(_data->_pos_of_elec);
+  
+//  _ft_vt_ele = _data->ft_vt(_data->_pos_of_elec);
 
-  //claculated by hodoscope
-  _vertex = _vertex_time(_hodo_t_v, _hodo_r_v, 1.0);
   
+//claculated by hodoscope
+  //_vertex = _vertex_time(_hodo_t_v, _hodo_r_v, 1.0);
+
+//using ft_vt directly
+ _vertex =   _data->ft_vt(_data->_pos_of_elec);
+
   //calculated by calorimeter
   //_vertex = _vertex_time(_ft_cal_t_v, _ft_cal_r_v, 1.0);
+  
   _ctof_vertex = _vertex;
   
 //  if (!std::isnan(_data->sc_ctof_time(0))) {
@@ -52,8 +59,8 @@ float Delta_T::_vertex_time(float sc_time, float sc_pathlength, float relatavist
   return sc_time - sc_pathlength / (relatavistic_beta * c_special_units);
 }
 
-float Delta_T::_deltat(int pid) {
-  _beta = 1.0 / sqrt(1.0 + (mass[pid] / _momentum) * (mass[pid] / _momentum));
+float Delta_T::_deltat(int ft_pid) {
+  _beta = 1.0 / sqrt(1.0 + (mass[ft_pid] / _momentum) * (mass[ft_pid] / _momentum));
   if (_sc_t == _sc_t && _sc_r == _sc_r) {
     return _vertex - _vertex_time(_sc_t, _sc_r, _beta);
   } else {
@@ -61,8 +68,8 @@ float Delta_T::_deltat(int pid) {
   }
 }
 
-float Delta_T::_ctof_deltat(int pid) {
-  _beta = 1.0 / sqrt(1.0 + (mass[pid] / _momentum) * (mass[pid] / _momentum));
+float Delta_T::_ctof_deltat(int ft_pid) {
+  _beta = 1.0 / sqrt(1.0 + (mass[ft_pid] / _momentum) * (mass[ft_pid] / _momentum));
   float _v = _vertex;
   if (_ctof) _v = _ctof_vertex;
   if (_ctof_t == _ctof_t && _ctof_r == _ctof_r) {
@@ -197,11 +204,11 @@ float Delta_T::_new_ft_vt_deltat(int part) {
   }
 }
 
-float Delta_T::vt_P() { return _deltat(PROTON); }
-float Delta_T::vt_Pi() { return _deltat(PIP); }
+float Delta_T::vt_P() { return _vertext(PROTON); }
+float Delta_T::vt_Pi() { return _vertext(PIP); }
 
-float Delta_T::vt_ctof_P() { return _ctof_deltat(PROTON); }
-float Delta_T::vt_ctof_Pi() { return _ctof_deltat(PIP); }
+float Delta_T::vt_ctof_P() { return _ctof_vertext(PROTON); }
+float Delta_T::vt_ctof_Pi() { return _ctof_vertext(PIP); }
 
 float Delta_T::_new_vt(int part) {
    _vtime = _data->vt(part);
@@ -220,3 +227,12 @@ float Delta_T::_new_ft_vt(int part) {
     return NAN;
   }
 }
+
+
+float Delta_T::vt_elec(){
+//   if(!_vertex==NAN){
+   return _vertex;
+}
+//else{
+  // return NAN;}
+//}
