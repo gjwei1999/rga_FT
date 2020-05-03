@@ -30,7 +30,7 @@ Reaction::Reaction(const std::shared_ptr<Branches12>& data, float beam_energy) {
 Reaction::~Reaction() {}
 
 void Reaction::epsilont() {
-    _nu = _beam_energy - sqrt(_data->px(0)*_data->px(0) + _data->py(0)*_data->py(0) + _data->pz(0)*_data->pz(0) + MASS_E*MASS_E);
+    _nu = _beam_energy - sqrt(_data->px(_data->_pos_of_elec)*_data->px(_data->_pos_of_elec) + _data->py(_data->_pos_of_elec)*_data->py(_data->_pos_of_elec) + _data->pz(_data->_pos_of_elec)*_data->pz(_data->_pos_of_elec) + MASS_E*MASS_E);
     _theta_e = _elec->Theta();
     _epsilont = 1/(1 + 2*(1+_nu*_nu/_Q2)*TMath::Tan(_theta_e/2)*TMath::Tan(_theta_e/2));
 }
