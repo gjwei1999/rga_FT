@@ -97,7 +97,7 @@ Histogram::Histogram(const std::string& output_file) {
   W_hist_twoPi = std::make_shared<TH1D>("W_twoPi", "W_twoPi", bins, zero, w_max);
   Q2_hist_twoPi = std::make_shared<TH1D>("Q2_twoPi", "Q2_twoPi", bins, zero, q2_max);
   W_vs_q2_twoPi = std::make_shared<TH2D>("W_vs_q2_twoPi", "W_vs_q2_twoPi", bins, zero, w_max, bins, zero, q2_max);
-
+  W_vs_q2_photon_twoPi = std::make_shared<TH2D>("W_vs_q2_photon_twoPi", "W_vs_q2_photon_twoPi", bins, zero, w_max, bins, zero, q2_max);
   W_photon_twoPi = std::make_shared<TH1D>("W_photon_twoPi", "W_photon_twoPi", bins, zero, w_max);
   
   invmass_Ppip_twoPi = std::make_shared<TH1D>("invmass_Ppip_twoPi", "invmass_Ppip_twoPi", bins, 1.0, 3.5);
@@ -320,7 +320,7 @@ void Histogram::Fill_WvsQ2_twoPi(const std::shared_ptr<Reaction>& _e) {
   //std::cout<<"missmass2   "<<_e->MM2()<<std::endl;
   //std::cout<<"weight   "<<_e->weight()<<std::endl;
   //
- 
+  W_vs_q2_photon_twoPi->Fill(_e->W(), _e->Q2(), _e->weight()/_e->flux());
   W_photon_twoPi->Fill(_e->W(), _e->weight()/_e->flux());
  
   invmass_Ppip_twoPi->Fill(_e->inv_Ppip(), _e->weight());
@@ -654,6 +654,11 @@ void Histogram::Write_WvsQ2() {
   W_vs_q2_twoPi->SetYTitle("Q^{2} (GeV^{2})");
   W_vs_q2_twoPi->SetOption("COLZ1");
   if (W_vs_q2_twoPi->GetEntries()) W_vs_q2_twoPi->Write();
+
+  W_vs_q2_photon_twoPi->SetXTitle("W (GeV)");
+  W_vs_q2_photon_twoPi->SetYTitle("Q^{2} (GeV^{2})");
+  W_vs_q2_photon_twoPi->SetOption("COLZ1");
+  if (W_vs_q2_photon_twoPi->GetEntries()) W_vs_q2_photon_twoPi->Write();
 
   W_hist_twoPi->SetXTitle("W (GeV)");
   if (W_hist_twoPi->GetEntries()) W_hist_twoPi->Write();
